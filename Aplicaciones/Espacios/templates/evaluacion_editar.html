@@ -1,0 +1,82 @@
+{% extends "./plantilla1.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Editar Evaluación</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/evaluacion_editar/{{ evaluacion.id }}/" id="frm_editar_evaluacion">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="cliente" class="form-label"><b>Cliente:</b></label>
+                            <select class="form-control" name="cliente" id="cliente" required>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}" {% if cliente.id == evaluacion.cliente.id %}selected{% endif %}>{{ cliente.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="espacio" class="form-label"><b>Espacio Evaluado:</b></label>
+                            <select class="form-control" name="espacio" id="espacio" required>
+                                {% for espacio in espacios %}
+                                    <option value="{{ espacio.id }}" {% if espacio.id == evaluacion.espacio.id %}selected{% endif %}>{{ espacio.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label"><b>Fecha</b></label>
+                            <input type="date" class="form-control" name="fecha" id="fecha" value="{{ evaluacion.fecha|date:'Y-m-d' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="puntuacion" class="form-label"><b>Puntuación:</b></label>
+                            <select class="form-control" name="puntuacion" id="puntuacion" required>
+                                {% for i in "12345" %}
+                                    <option value="{{ i }}" {% if evaluacion.puntuacion == i|add:0 %}selected{% endif %}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label"><b>Comentario:</b></label>
+                            <textarea class="form-control" name="comentario" id="comentario" rows="3">{{ evaluacion.comentario }}</textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <a href="{% url 'evaluacion_mostrar' %}" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#frm_editar_evaluacion").validate({
+        rules: {
+            cliente: { required: true },
+            espacio: { required: true },
+            puntuacion: { required: true },
+            comentario: { maxlength: 500 }
+        },
+        messages: {
+            cliente: { required: "Por favor, seleccione un cliente." },
+            espacio: { required: "Por favor, seleccione un espacio." },
+            puntuacion: { required: "Por favor, seleccione una puntuación." },
+            comentario: { maxlength: "El comentario no debe exceder los 500 caracteres." }
+        }
+    });
+</script>
+
+{% endblock %}

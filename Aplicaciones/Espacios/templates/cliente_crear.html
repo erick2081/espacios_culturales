@@ -1,0 +1,82 @@
+{% extends "./plantilla1.html" %}
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Agregar Nuevo Cliente</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/guardar_cliente/" id="frm_nuevo_cliente">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="cedula" class="form-label"><b>Cédula:</b></label>
+                            <input type="text" class="form-control" name="cedula" id="cedula" placeholder="Ingrese la cédula" maxlength="10">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label"><b>Nombre:</b></label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingrese el nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label"><b>Email:</b></label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Ingrese el email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label"><b>Teléfono:</b></label>
+                            <input type="text" class="form-control" name="telefono" id="telefono" placeholder="Ingrese el teléfono" maxlength="10">
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label"><b>Dirección:</b></label>
+                            <textarea class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección"></textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="/cliente_mostrar/" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#frm_nuevo_cliente").validate({
+        rules: {
+            cedula: {
+                maxlength: 10
+            },
+            nombre: {
+                required: true,
+                maxlength: 255
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            telefono: {
+                maxlength: 10
+            }
+        },
+        messages: {
+            cedula: {
+                maxlength: "La cédula no debe exceder 10 caracteres."
+            },
+            nombre: {
+                required: "Por favor, ingrese el nombre.",
+                maxlength: "El nombre no debe exceder 255 caracteres."
+            },
+            email: {
+                required: "Por favor, ingrese un email.",
+                email: "Ingrese un email válido."
+            },
+            telefono: {
+                maxlength: "El teléfono no debe exceder 10 caracteres."
+            }
+        }
+    });
+</script>
+{% endblock %}

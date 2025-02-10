@@ -1,0 +1,69 @@
+{% extends "./plantilla1.html" %}
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Editar Cliente</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/cliente_editar/{{ cliente.id }}/" id="frm_editar_cliente">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="cedula" class="form-label"><b>Cédula:</b></label>
+                            <input type="text" class="form-control" name="cedula" id="cedula" value="{{ cliente.cedula }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label"><b>Nombre:</b></label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" value="{{ cliente.nombre }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label"><b>Email:</b></label>
+                            <input type="email" class="form-control" name="email" id="email" value="{{ cliente.email }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label"><b>Teléfono:</b></label>
+                            <input type="text" class="form-control" name="telefono" id="telefono" value="{{ cliente.telefono }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label"><b>Dirección:</b></label>
+                            <textarea class="form-control" name="direccion" id="direccion">{{ cliente.direccion }}</textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <a href="/cliente_mostrar/" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#frm_editar_cliente").validate({
+        rules: {
+            nombre: {
+                required: true,
+                maxlength: 255
+            },
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            nombre: {
+                required: "Por favor, ingrese el nombre.",
+                maxlength: "El nombre no debe exceder 255 caracteres."
+            },
+            email: {
+                required: "Por favor, ingrese el email.",
+                email: "Ingrese un email válido."
+            }
+        }
+    });
+</script>
+{% endblock %}

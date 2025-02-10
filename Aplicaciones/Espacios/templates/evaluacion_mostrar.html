@@ -1,0 +1,87 @@
+{% extends "./plantilla1.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="mb-4">Listado de Evaluaciones</h1>
+            <a href="{% url 'evaluacion_crear' %}" class="btn btn-primary mb-4">Agregar Evaluación</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-dark table-striped table-hover text-center" id="tbl-evaluaciones">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Espacio</th>
+                            <th>Fecha Evaluación</th>
+                            <th>Calificación</th>
+                            <th>Observaciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evaluacion in evaluaciones %}
+                            <tr>
+                                <td>{{ evaluacion.id }}</td>
+                                <td>{{ evaluacion.cliente.nombre }}</td>
+                                <td>{{ evaluacion.espacio.nombre }}</td>
+                                <td>{{ evaluacion.fecha|date:"Y-m-d" }}</td>
+                                <td>{{ evaluacion.puntuacion }}</td>
+                                <td>{{ evaluacion.comentario }}</td>
+                                <td>
+                                    <a href="/evaluacion_editar/{{ evaluacion.id }}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-pencil"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="eliminarEvaluacion('{% url 'eliminar_evaluacion' evaluacion.id %}');" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function eliminarEvaluacion(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar la evaluación seleccionada?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
+
+<script>
+    new DataTable('#tbl-evaluaciones', {
+        layout: {
+            topStart: {
+                buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+            }
+        },
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "./plantilla1.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="mb-4">Listado de Proyectos de Construcción</h1>
+            <a href="/proyecto_crear/" class="btn btn-primary mb-4">Agregar Proyecto</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-dark table-striped table-hover text-center" id="tbl-proyectos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Espacio</th>
+                            <th>Cliente</th>
+                            <th>Presupuesto</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proyecto in proyectos %}
+                            <tr>
+                                <td>{{ proyecto.id }}</td>
+                                <td>{{ proyecto.nombre }}</td>
+                                <td>{{ proyecto.espacio }}</td>
+                                <td>{{ proyecto.cliente }}</td>
+                                <td>{{ proyecto.presupuesto }}</td>
+                                <td>{{ proyecto.fecha_inicio }}</td>
+                                <td>{{ proyecto.fecha_fin }}</td>
+                                <td>{{ proyecto.estado }}</td>
+                                <td>
+                                    <a href="/proyecto_editar/{{ proyecto.id }}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-pencil"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="eliminarProyecto('/eliminar_proyecto/{{ proyecto.id }}');" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function eliminarProyecto(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar el proyecto seleccionado?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
+
+<script>
+    new DataTable('#tbl-proyectos', {
+        layout: {
+            topStart: {
+                buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+            }
+        }
+    });
+</script>
+
+{% endblock %}

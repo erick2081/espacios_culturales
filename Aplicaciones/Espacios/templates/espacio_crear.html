@@ -1,0 +1,87 @@
+{% extends "./plantilla1.html" %}
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Agregar Nuevo Espacio Cultural</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/guardar_espacio/" id="frm_nuevo_espacio" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label"><b>Nombre:</b></label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingrese el nombre del espacio" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ubicacion" class="form-label"><b>Ubicación:</b></label>
+                            <textarea class="form-control" name="ubicacion" id="ubicacion" placeholder="Ingrese la ubicación" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="capacidad" class="form-label"><b>Capacidad:</b></label>
+                            <input type="number" class="form-control" name="capacidad" id="capacidad" placeholder="Ingrese la capacidad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label"><b>Descripción:</b></label>
+                            <textarea class="form-control" name="descripcion" id="descripcion" placeholder="Ingrese una breve descripción"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagen" class="form-label"><b>Imagen:</b></label>
+                            <input type="file" class="form-control" name="imagen" id="imagen">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="/espacio_mostrar/" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#frm_nuevo_espacio").validate({
+        rules: {
+            nombre: {
+                required: true,
+                maxlength: 255
+            },
+            ubicacion: {
+                required: true
+            },
+            capacidad: {
+                required: true,
+                number: true,
+                min: 1
+            }
+        },
+        messages: {
+            nombre: {
+                required: "Por favor, ingrese el nombre del espacio.",
+                maxlength: "El nombre no debe exceder 255 caracteres."
+            },
+            ubicacion: {
+                required: "Por favor, ingrese la ubicación."
+            },
+            capacidad: {
+                required: "Por favor, ingrese la capacidad.",
+                number: "Debe ser un número válido.",
+                min: "Debe ser al menos 1."
+            }
+        }
+    });
+</script>
+<script>
+    $("#imagen").fileinput({
+        // Language: "es",
+        allowedFileExtensions: ["jpg", "jpeg", "png", "pdf", "docx", "txt"],
+        showCaption: false,
+        dropZoneEnabled: true,
+        showClose:false
+    });
+</script>
+{% endblock %}

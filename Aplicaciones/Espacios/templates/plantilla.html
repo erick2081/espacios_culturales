@@ -1,0 +1,127 @@
+{% load static %}
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robotica
+  </title>
+  <link rel="shortcut icon" type="image/png" href="" />
+  <link rel="stylesheet" href="{%static 'static1/assets/css/styles.min.css' %}" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,600,700&display=swap" rel="stylesheet">
+
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- FileInput -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+
+  <!-- iziToast -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- jQuery Validate -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+  <!-- DataTables -->
+ <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+ <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+ <!-- importa FileImput -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/js/fileinput.min.js" integrity="sha512-0wQvB58Ha5coWmcgtg4f11CTSSxfrfLClUp9Vy0qhzYzCZDSnoB4Vhu5JXJFs7rU24LE6JsH+6hpP7vQ22lk5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/css/fileinput.min.css" integrity="sha512-yDVMONIXJPPAoULZ92Ygngsn8ZUGB4ejm6fCc6q9ZvdH8blFAOgg75XZSEaAJ5m4E/yPI1BAi5fF2axMHVuZ5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+ <!-- Incluir los archivos CSS de DataTables y botones -->
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css">
+
+<!-- Incluir los archivos JS de DataTables y sus dependencias -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script> <!-- Asegúrate de incluir jQuery -->
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script> <!-- DataTables base -->
+<script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script> <!-- DataTables buttons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> <!-- JSZip para exportar a Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script> <!-- pdfMake para exportar a PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script> <!-- Fuentes para PDF -->
+<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script> <!-- Exportación a HTML5 (Excel, PDF) -->
+
+
+<!--Importado jquery validate-->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Importando jQuery Validate -->
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<!-- importa FileImput -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/js/fileinput.min.js" integrity="sha512-0wQvB58Ha5coWmcgtg4f11CTSSxfrfLClUp9Vy0qhzYzCZDSnoB4Vhu5JXJFs7rU24LE6JsH+6hpP7vQ22lk5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/css/fileinput.min.css" integrity="sha512-yDVMONIXJPPAoULZ92Ygngsn8ZUGB4ejm6fCc6q9ZvdH8blFAOgg75XZSEaAJ5m4E/yPI1BAi5fF2axMHVuZ5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+data-sidebar-position="fixed" data-header-position="fixed">
+
+ <main class="mt-5 pt-3">
+    {% block contenido %}
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary text-white text-center py-3 mt-5">
+    <p class="mb-0">© 2025 App Gestión | Desarrollado por Quishpe Erick</p>
+  </footer>
+
+
+  <!-- Mensajes de Confirmación -->
+  {% if messages %}
+    {% for mensajeConfirmacion in messages %}
+      <script>
+        iziToast.{{ mensajeConfirmacion.tags }}({
+          title: "{{ mensajeConfirmacion.tags|title }}",
+          message: "{{ mensajeConfirmacion|safe }}",
+          position: 'topRight'
+        });
+      </script>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Form Validation Script -->
+  <script>
+    $(document).ready(function() {
+      $("form").validate({
+        errorElement: "label",
+        errorClass: "error",
+        highlight: function(element) {
+          $(element).addClass("error");
+        },
+        unhighlight: function(element) {
+          $(element).removeClass("error");
+        }
+      });
+    });
+  </script>
+
+  <!-- Custom Styles -->
+  <style>
+    label.error {
+      color: white;
+      font-weight: bold;
+      background-color: red;
+      border-radius: 10px;
+      padding: 5px;
+      margin-top: 5px;
+    }
+    input.error {
+      border: 1px solid red;
+    }
+  </style>
+  <script src="{%static 'assets/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{%static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{%static 'assets/js/sidebarmenu.js' %}"></script>
+  <script src="{%static 'assets/js/app.min.js' %}"></script>
+  <script src="{%static 'assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+  <script src="{%static 'assets/libs/simplebar/dist/simplebar.js' %}"></script>
+  <script src="{%static 'assets/js/dashboard.js' %}"></script>
+</body>
+</html>

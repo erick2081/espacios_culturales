@@ -1,0 +1,96 @@
+{% extends "./plantilla1.html" %}
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="mb-4">Listado de Espacios</h1>
+            <a href="/espacio_crear/" class="btn btn-primary mb-4">Agregar Espacio</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-dark table-striped table-hover text-center" id="tbl-espacios">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Ubicación</th>
+                            <th>Capacidad</th>
+                            <th>Descripción</th>
+                            <th>Imagen</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for espacio in espacios %}
+                            <tr>
+                                <td>{{ espacio.id }}</td>
+                                <td>{{ espacio.nombre }}</td>
+                                <td>{{ espacio.ubicacion }}</td>
+                                <td>{{ espacio.capacidad }}</td>
+                                <td>{{ espacio.descripcion }}</td>
+                                <td>
+                                    {% if espacio.imagen %}
+                                        <a href="{{ espacio.imagen.url }}" target="_blank">
+                                            <img src="{{ espacio.imagen.url }}" alt="Imagen del espacio" height="100" width="100" class="mb-2">
+                                        </a>
+                                        <br>
+                                        <a href="{{ espacio.imagen.url }}" target="_blank" class="btn btn-info btn-sm">Ver Imagen</a>
+                                        <a href="{{ espacio.imagen.url }}" download class="btn btn-success btn-sm">Descargar Imagen</a>
+                                    {% else %}
+                                        No disponible
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/espacio_editar/{{ espacio.id }}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="eliminarEspacio('/eliminar_espacio/{{ espacio.id }}');" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>                                    
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function eliminarEspacio(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar el espacio seleccionado?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;  // Redirige a la URL de eliminación
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
+
+<script>
+    new DataTable('#tbl-espacios', {
+        layout: {
+            topStart: {
+                buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+            }
+        }
+    });
+</script>
+{% endblock %}

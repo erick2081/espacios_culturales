@@ -1,0 +1,152 @@
+{% extends "./plantilla1.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Editar Proyecto</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/proyecto_editar/{{ proyecto.id }}/" id="frm_editar_proyecto">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label"><b>Nombre del Proyecto:</b></label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" value="{{ proyecto.nombre }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="fecha_inicio" class="form-label"><b>Fecha de Inicio:</b></label>
+                            <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio" value="{{ proyecto.fecha_inicio|date:'Y-m-d' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="fecha_fin" class="form-label"><b>Fecha de Fin:</b></label>
+                            <input type="date" class="form-control" name="fecha_fin" id="fecha_fin" value="{{ proyecto.fecha_fin|date:'Y-m-d' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="presupuesto" class="form-label"><b>Presupuesto:</b></label>
+                            <input type="number" step="0.01" class="form-control" name="presupuesto" id="presupuesto" value="{{ proyecto.presupuesto }}" required>
+
+                        </div>
+                    
+                        
+                        <div class="mb-3">
+                            <label for="espacio" class="form-label"><b>Espacio Asignado:</b></label>
+                            <select class="form-control" name="espacio" id="espacio" required>
+                                {% for espacio in espacios %}
+                                    <option value="{{ espacio.id }}" {% if espacio.id == proyecto.espacio.id %}selected{% endif %}>{{ espacio.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cliente" class="form-label"><b>Cliente:</b></label>
+                            <select class="form-control" name="cliente" id="cliente" required>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}" {% if cliente.id == proyecto.cliente.id %}selected{% endif %}>{{ cliente.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="estado" class="form-label"><b>Estado:</b></label>
+                            <select class="form-control" name="estado" id="estado" required>
+                                <option value="En progreso" {% if proyecto.estado == 'En progreso' %}selected{% endif %}>En progreso</option>
+                                <option value="Finalizado" {% if proyecto.estado == 'Finalizado' %}selected{% endif %}>Finalizado</option>
+                                <option value="Cancelado" {% if proyecto.estado == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <a href="{% url 'proyecto_mostrar' %}" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#frm_editar_proyecto").validate({
+        rules: {
+            nombre: {
+                required: true,
+                maxlength: 255
+            },
+            fecha_inicio: {
+                required: true,
+                date: true
+            },
+            fecha_fin: {
+                date: true,
+                // Validamos que la fecha de fin no sea anterior a la de inicio
+                greaterThanOrEqualTo: "#fecha_inicio"
+            },
+            presupuesto: {
+                required: true,
+                number: true,
+                min: 0
+            },
+            espacio: {
+                required: true
+            },
+            cliente: {
+                required: true
+            },
+            estado: {
+                required: true
+            }
+        },
+        messages: {
+            nombre: {
+                required: "Por favor, ingrese el nombre del proyecto.",
+                maxlength: "El nombre no debe exceder los 255 caracteres."
+            },
+            fecha_inicio: {
+                required: "Por favor, seleccione la fecha de inicio.",
+                date: "Ingrese una fecha válida."
+            },
+            fecha_fin: {
+                date: "Ingrese una fecha válida.",
+                greaterThanOrEqualTo: "La fecha de finalización no puede ser anterior a la fecha de inicio."
+            },
+            presupuesto: {
+                required: "Por favor, ingrese el presupuesto.",
+                number: "El presupuesto debe ser un número.",
+                min: "El presupuesto no puede ser negativo."
+            },
+            espacio: {
+                required: "Por favor, seleccione un espacio."
+            },
+            cliente: {
+                required: "Por favor, seleccione un cliente."
+            },
+            estado: {
+                required: "Por favor, seleccione el estado del proyecto."
+            }
+        }
+    });
+
+    // Método personalizado para la validación de fechas
+    $.validator.addMethod("greaterThanOrEqualTo", function(value, element, param) {
+        var startDate = $(param).val(); // Valor de la fecha de inicio
+        var endDate = value; // Valor de la fecha de finalización ingresada
+
+        if (!startDate || !endDate) {
+            return true; // Si alguna de las fechas está vacía, no se valida
+        }
+
+        // Comparamos las fechas
+        return new Date(endDate) >= new Date(startDate);
+    }, "La fecha de finalización no puede ser anterior a la fecha de inicio.");
+</script>
+
+{% endblock %}

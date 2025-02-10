@@ -1,0 +1,67 @@
+{% extends "./plantilla1.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="mb-4">Agregar Nueva Evaluación</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="{% url 'agregar_evaluacion' %}" id="frm_nueva_evaluacion">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="cliente" class="form-label"><b>Cliente:</b></label>
+                            <select class="form-control" name="cliente" id="cliente" required>
+                                <option value="" disabled selected>Seleccione un cliente</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="espacio" class="form-label"><b>Espacio Evaluado:</b></label>
+                            <select class="form-control" name="espacio" id="espacio" required>
+                                <option value="" disabled selected>Seleccione un espacio</option>
+                                {% for espacio in espacios %}
+                                    <option value="{{ espacio.id }}">{{ espacio.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label"><b>Fecha </b></label>
+                            <input type="date" class="form-control" name="fecha" id="fecha">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="puntuacion" class="form-label"><b>Puntuación:</b></label>
+                            <select class="form-control" name="puntuacion" id="puntuacion" required>
+                                <option value="" disabled selected>Seleccione una puntuación</option>
+                                {% for i in "12345" %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label"><b>Comentario (Opcional):</b></label>
+                            <textarea class="form-control" name="comentario" id="comentario" rows="3" placeholder="Escriba un comentario"></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="{% url 'evaluacion_mostrar' %}" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
