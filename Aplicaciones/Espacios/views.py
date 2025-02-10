@@ -310,16 +310,22 @@ def agregar_evaluacion(request):
         fecha = request.POST.get('fecha')
         puntuacion = request.POST.get('puntuacion')
         comentario = request.POST.get('comentario')
+        email = request.POST.get('email')
+        notificar = request.POST.get('notificar', 'NO')  # Capturar el valor de "notificar" con valor por defecto 'NO'
 
+        # Obtener los objetos relacionados
         cliente = Cliente.objects.get(id=cliente_id)
         espacio = Espacio.objects.get(id=espacio_id)
 
+        # Crear la nueva evaluación, incluyendo el campo "notificar"
         Evaluacion.objects.create(
             cliente=cliente,
             espacio=espacio,
             fecha=fecha,
             puntuacion=puntuacion,
-            comentario=comentario
+            comentario=comentario,
+            email=email,
+            notificar=notificar  # Agregar el valor de "notificar"
         )
 
         messages.success(request, "Evaluación guardada correctamente.")
@@ -327,13 +333,14 @@ def agregar_evaluacion(request):
 
     clientes = Cliente.objects.all()
     espacios = Espacio.objects.all()
-    
+
     return render(request, 'evaluacion_crear.html', {
         'clientes': clientes,
         'espacios': espacios
     })
+
 ### editar
-def evaluacion_editar(request,id):
+def evaluacion_editar(request, id):
     evaluacion = get_object_or_404(Evaluacion, id=id)
     clientes = Cliente.objects.all()
     espacios = Espacio.objects.all()
@@ -343,7 +350,10 @@ def evaluacion_editar(request,id):
         espacio_id = request.POST.get('espacio')
         puntuacion = request.POST.get('puntuacion')
         comentario = request.POST.get('comentario', '').strip()
+        email = request.POST.get('email')
+        notificar = request.POST.get('notificar', 'NO')  # Valor predeterminado 'NO'
         
+        # Validar que los campos obligatorios no estén vacíos
         if not cliente_id or not espacio_id or not puntuacion:
             messages.error(request, "Todos los campos obligatorios deben ser completados.")
         else:
@@ -351,7 +361,9 @@ def evaluacion_editar(request,id):
             evaluacion.espacio_id = espacio_id
             evaluacion.puntuacion = int(puntuacion)
             evaluacion.comentario = comentario if comentario else None
-            evaluacion.save()
+            evaluacion.email = email  # Asignamos el email
+            evaluacion.notificar = notificar  # Asignamos el valor de 'notificar'
+            evaluacion.save()  # Guardamos los cambios en la base de datos
             messages.success(request, "Evaluación actualizada correctamente.")
             return redirect('evaluacion_mostrar')
     
@@ -360,6 +372,7 @@ def evaluacion_editar(request,id):
         'clientes': clientes,
         'espacios': espacios
     })
+
 
 # Eliminar proyecto
 def eliminar_evaluacion(request, id):

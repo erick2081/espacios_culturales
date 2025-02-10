@@ -54,6 +54,21 @@
                             <textarea class="form-control" name="comentario" id="comentario" rows="3" placeholder="Escriba un comentario"></textarea>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="email" class="form-label"><b>Correo Electrónico:</b></label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Ingrese el correo electrónico" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notificar" class="form-label"><b>¿Notificar por correo?</b></label>
+                            <select class="form-control" name="notificar" id="notificar" required>
+                                <option value="NO">No</option>
+                                <option value="SI">Sí</option>
+                            </select>
+                        </div>
+                        
+
+
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">Guardar</button>
                             <a href="{% url 'evaluacion_mostrar' %}" class="btn btn-danger">Cancelar</a>
@@ -64,4 +79,51 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $("#frm_nueva_evaluacion").validate({
+        rules: {
+            cliente: {
+                required: true
+            },
+            espacio: {
+                required: true
+            },
+            fecha: {
+                required: true
+            },
+            puntuacion: {
+                required: true
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            comentario: {
+                maxlength: 500
+            }
+        },
+        messages: {
+            cliente: {
+                required: "Por favor, seleccione un cliente."
+            },
+            espacio: {
+                required: "Por favor, seleccione un espacio."
+            },
+            fecha: {
+                required: "Por favor, ingrese una fecha."
+            },
+            puntuacion: {
+                required: "Por favor, seleccione una puntuación."
+            },
+            email: {
+                required: "Por favor, ingrese un correo electrónico.",
+                email: "Por favor, ingrese un correo electrónico válido."
+            },
+            comentario: {
+                maxlength: "El comentario no debe exceder los 500 caracteres."
+            }
+        }
+    });
+</script>
+
 {% endblock %}

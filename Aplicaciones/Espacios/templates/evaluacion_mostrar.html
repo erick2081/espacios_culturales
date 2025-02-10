@@ -19,7 +19,9 @@
                             <th>Espacio</th>
                             <th>Fecha Evaluación</th>
                             <th>Calificación</th>
-                            <th>Observaciones</th>
+                            <th>Comentario</th>
+                            <th>Email</th>
+                            <th>Notificar</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -32,6 +34,8 @@
                                 <td>{{ evaluacion.fecha|date:"Y-m-d" }}</td>
                                 <td>{{ evaluacion.puntuacion }}</td>
                                 <td>{{ evaluacion.comentario }}</td>
+                                <td>{{ evaluacion.email }}</td>
+                                <td>{{ evaluacion.notificar }}</td>
                                 <td>
                                     <a href="/evaluacion_editar/{{ evaluacion.id }}" class="btn btn-outline-warning btn-sm">
                                         <i class="fas fa-pencil"></i>
